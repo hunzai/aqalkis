@@ -18,8 +18,8 @@ module Agent
 
     end
 
-    def goto_page(url)
-      visit(url)
+    def goto_page(ebay_url)
+      visit(ebay_url)
     end
 
     def select_dropdown
@@ -59,18 +59,28 @@ module Agent
         return all("li")
       end
     end
+    
+
   end
 
   def self.ebay
    
-   categories_options = "//*[@id='gh-cat']/option"
-   sort_options = '//*[@id="Center"]/div[1]/ul/li[4]/div/a'
-    url = "http://www.ebay.de/"
+   ebay_category_xpath = "//*[@id='gh-cat']/option"
+   ebay_sort_options = '//*[@id="Center"]/div[1]/ul/li[4]/div/a'
+    ebay_url = "http://www.ebay.de/"
+    ebay_sale_type = '//*[@id="Center"]/div[1]/ul/li[1]/div'  
+    ebay_sale_type_auction= '//*[@id="Center"]/div[1]/ul/li[1]/div/div[2]/ul/li[1]'   
+    ebay_most_demanded_auction = '//*[@id="ListViewInner"]/li[0]/div/div/a'
+    
     digger = Digger.new
-    digger.goto_page(url)
-    digger.select_from_dropdown(categories_options, 3)
-    digger.hover_over_xpath(sort_options)
+    digger.goto_page(ebay_url)
+    digger.select_from_dropdown(ebay_category_xpath, 3)
+    digger.hover_over_xpath(ebay_sort_options)
     digger.sort_by_expire_time
+    
+    digger.hover_over_xpath(ebay_sale_type)
+    digger.click_on_xpath(ebay_sale_type_auction)
+    digger.click_on_xpath(ebay_most_demanded_auction)
 
   #out_put = ""
   puts digger.get_all_auction_items
